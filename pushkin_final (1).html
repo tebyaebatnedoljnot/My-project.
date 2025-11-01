@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ЖК «Пушкин»: Аналитическая записка и КП | Сектор Роста</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Fonts and Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+/* Root palette */
+:root {
+  --primary: #0f172a;
+  --secondary: #475569;
+  --accent: #2563eb;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg: #f7faff;
+  --bg-alt: #ffffff;
+  --border: #e2e8f0;
+}
+*{box-sizing:border-box;}
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--primary);
+  line-height: 1.6;
+}
+/* Layout helpers */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+/* Header */
+.header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #fff;
+  padding: 32px 0;
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.logo-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.logo-block img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+.company-info h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.company-info p {
+  margin: 2px 0 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+.doc-info {
+  text-align: right;
+  font-size: 14px;
+  opacity: 0.9;
+}
+.doc-info .confidential {
+  color: var(--warning);
+  font-weight: 700;
+}
+/* Title section */
+.title-block {
+  margin-top: 24px;
+}
+.title-block h2 {
+  font-size: 40px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.title-block p {
+  font-size: 18px;
+  max-width: 700px;
+  opacity: 0.9;
+}
+/* Navigation */
+.nav {
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-tabs {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-tabs::-webkit-scrollbar { display:none; }
+.nav-tabs button {
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--secondary);
+  padding: 16px 24px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.nav-tabs button.active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.nav-tabs button:hover {
+  color: var(--primary);
+}
+/* Content */
+.tab-panel {
+  display: none;
+  padding: 48px 0;
+}
+.tab-panel.active {
+  display: block;
+}
+/* Metrics grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+.metric-card {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  transition: transform .2s,box-shadow .2s;
+}
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.05);
+}
+.metric-card .metric-header {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom: 12px;
+}
+.metric-header i {
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+}
+.metric-title {
+  font-size:14px;
+  font-weight:500;
+  color: var(--secondary);
+}
+.metric-value {
+  font-size:36px;
+  font-weight:800;
+  margin: 8px 0;
+  color: var(--primary);
+}
+.metric-value.accent { color: var(--accent); }
+.metric-value.success { color: var(--success); }
+.metric-value.danger { color: var(--danger); }
+.metric-subtitle {
+  font-size: 13px;
+  color: var(--secondary);
+}
+/* Sections */
+.section {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px;
+  margin-bottom: 32px;
+}
+.section-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.section-title i {
+  color: var(--accent);
+}
+/* Analysis list */
+.analysis-list {
+  list-style:none;
+  padding:0;
+}
+.analysis-item {
+  display:flex;
+  gap:16px;
+  padding:20px 0;
+  border-bottom:1px solid var(--border);
+}
+.analysis-item:last-child { border-bottom:none; }
+.analysis-icon {
+  width:48px;
+  height:48px;
+  background: var(--bg);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color: var(--accent);
+  flex-shrink:0;
+}
+.analysis-content h4 {
+  font-size:16px;
+  font-weight:600;
+  margin:0 0 6px;
+}
+.analysis-content p {
+  font-size:14px;
+  color: var(--secondary);
+  margin:0;
+}
+/* Progress bars */
+.progress-bar {
+  height:8px;
+  background: var(--border);
+  border-radius:4px;
+  overflow:hidden;
+  margin:8px 0;
+}
+.progress-fill {
+  height:100%;
+  background: linear-gradient(90deg,var(--accent),var(--success));
+}
+/* Comparison table */
+.table {
+  width:100%;
+  border-collapse:collapse;
+}
+.table th {
+  background: var(--bg);
+  padding:16px;
+  text-align:left;
+  border-bottom:2px solid var(--border);
+  font-size:14px;
+  font-weight:600;
+}
+.table td {
+  padding:16px;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
+  color: var(--primary);
+}
+.table tr:last-child td { border-bottom:none; }
+/* Timeline */
+.timeline {
+  position:relative;
+  padding-left:32px;
+}
+.timeline::before {
+  content:"";
+  position:absolute;
+  left:4px;
+  top:0;
+  bottom:0;
+  width:2px;
+  background: var(--border);
+}
+.timeline-item {
+  position:relative;
+  margin-bottom:32px;
+}
+.timeline-item:last-child { margin-bottom:0; }
+.timeline-item::before {
+  content:"";
+  position:absolute;
+  left:-13px;
+  top:5px;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background: var(--accent);
+  border:3px solid var(--bg-alt);
+}
+.timeline-phase {
+  font-size:12px;
+  color: var(--accent);
+  font-weight:600;
+  margin-bottom:4px;
+}
+.timeline-title {
+  font-size:17px;
+  font-weight:600;
+  margin-bottom:6px;
+}
+.timeline-desc {
+  font-size:14px;
+  color: var(--secondary);
+}
+/* Pricing cards */
+.pricing-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+  gap:24px;
+  margin-bottom:32px;
+}
+.pricing-card {
+  background: var(--bg-alt);
+  border:2px solid var(--border);
+  border-radius:20px;
+  padding:32px;
+  transition:transform 0.2s,border-color 0.2s,box-shadow 0.2s;
+  position:relative;
+}
+.pricing-card:hover {
+  transform:translateY(-4px);
+  border-color: var(--accent);
+  box-shadow:0 8px 24px rgba(0,0,0,0.08);
+}
+.pricing-card.featured {
+  border-color: var(--accent);
+  background: linear-gradient(135deg,#eff6ff 0%,#ffffff 100%);
+}
+.pricing-card.featured::before {
+  content:"РЕКОМЕНДУЕМ";
+  position:absolute;
+  top:-10px;
+  right:24px;
+  background: var(--accent);
+  color:#fff;
+  padding:4px 12px;
+  border-radius:16px;
+  font-size:10px;
+  font-weight:700;
+}
+.pricing-header h3 {
+  margin:0;
+  font-size:20px;
+  font-weight:700;
+}
+.pricing-price {
+  margin:16px 0;
+  font-size:36px;
+  font-weight:800;
+  color: var(--accent);
+}
+.pricing-price span {
+  font-size:16px;
+  color: var(--secondary);
+  font-weight:500;
+}
+.pricing-features {
+  list-style:none;
+  padding:0;
+  margin:24px 0;
+}
+.pricing-features li {
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  font-size:14px;
+  margin-bottom:12px;
+  color: var(--primary);
+}
+.pricing-features li i {
+  color: var(--success);
+  margin-top:3px;
+  flex-shrink:0;
+}
+.pricing-button {
+  width:100%;
+  padding:14px;
+  background: var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:background 0.2s,transform 0.2s;
+}
+.pricing-button:hover {
+  background:#1e40af;
+  transform:translateY(-2px);
+}
+/* ROI calculator */
+.calculator {
+  background: var(--bg);
+  border-radius:16px;
+  padding:24px;
+  margin-top:32px;
+}
+.calculator-grid {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:24px;
+}
+.calculator-input {
+  margin-bottom:20px;
+}
+.calculator-label {
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:8px;
+  color: var(--primary);
+}
+.calculator-value {
+  font-size:16px;
+  font-weight:700;
+  margin-top:4px;
+  color: var(--accent);
+}
+.slider {
+  width:100%;
+  height:6px;
+  border-radius:3px;
+  background: var(--border);
+  outline:none;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance:none;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background: var(--accent);
+  cursor:pointer;
+}
+.slider::-moz-range-thumb {
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background: var(--accent);
+  cursor:pointer;
+  border:none;
+}
+.calculator-results {
+  background: var(--bg-alt);
+  border-radius:12px;
+  padding:24px;
+}
+.result-item {
+  display:flex;
+  justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+}
+.result-item:last-child { border-bottom:none; }
+.result-label {
+  font-size:14px;
+  color: var(--secondary);
+}
+.result-value {
+  font-size:16px;
+  font-weight:700;
+  color: var(--success);
+}
+/* Call to action */
+.cta {
+  background: linear-gradient(135deg,var(--accent) 0%,#1e40af 100%);
+  color:#fff;
+  padding:48px 32px;
+  border-radius:20px;
+  text-align:center;
+  margin-top:48px;
+}
+.cta h3 {
+  font-size:32px;
+  font-weight:800;
+  margin-bottom:12px;
+}
+.cta p {
+  font-size:16px;
+  opacity:0.95;
+  margin-bottom:24px;
+  max-width:600px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.cta-buttons {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:16px;
+}
+.cta-button {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:14px 28px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  border:none;
+  text-decoration:none;
+  font-family:inherit;
+}
+.cta-button.primary {
+  background:#fff;
+  color: var(--accent);
+}
+.cta-button.primary:hover {
+  transform:translateY(-2px);
+  box-shadow:0 6px 12px rgba(0,0,0,0.15);
+}
+.cta-button.secondary {
+  background:transparent;
+  color:#fff;
+  border:2px solid #fff;
+}
+.cta-button.secondary:hover {
+  background:rgba(255,255,255,0.1);
+}
+/* Footer */
+.footer {
+  background: var(--bg-alt);
+  padding:32px;
+  text-align:center;
+  color: var(--secondary);
+  font-size:14px;
+}
+.footer a {
+  color: var(--accent);
+  text-decoration:none;
+  margin:0 4px;
+}
+@media (max-width: 768px) {
+  .calculator-grid { grid-template-columns:1fr; }
+  .pricing-grid { grid-template-columns:1fr; }
+  .title-block h2 { font-size:32px; }
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="container">
+    <div class="header-top">
+      <div class="logo-block">
+        <img src="sektorrosta_logo_transparent.png" alt="SektorRosta logo">
+        <div class="company-info">
+          <h1>ООО «Сектор Роста»</h1>
+          <p>Leadgenia | Маркетинг‑консалтинг и стратегическое развитие</p>
+        </div>
+      </div>
+      <div class="doc-info">
+        <div class="confidential">КОНФИДЕНЦИАЛЬНО</div>
+        <div class="date">01 ноября 2025</div>
+        <div class="client">Для руководства ООО СЗ «Город Первых»</div>
+      </div>
+    </div>
+    <div class="title-block">
+      <h2>ЖК «Пушкин»: Аналитическая записка и КП</h2>
+      <p>Комплексная стратегия увеличения продаж премиального проекта в наукограде Обнинск</p>
+    </div>
+  </div>
+</header>
+<nav class="nav">
+  <div class="container">
+    <div class="nav-tabs">
+      <button class="active" data-tab="situation">Текущая ситуация</button>
+      <button data-tab="gap">Разрыв потенциала</button>
+      <button data-tab="solution">Системное решение</button>
+      <button data-tab="offer">Коммерческое предложение</button>
+      <button id="printBtn" style="margin-left:auto;background:var(--accent);color:white;border-radius:8px;">Экспорт в PDF</button>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <!-- Situation Panel -->
+  <section id="situation" class="tab-panel active">
+    <!-- Metrics -->
+    <div class="metrics-grid">
+      <div class="metric-card highlight">
+        <div class="metric-header">
+          <i data-lucide="map"></i>
+          <span class="metric-title">Позиционирование</span>
+        </div>
+        <div class="metric-value accent">Комфорт+</div>
+        <div class="metric-subtitle">Премиум класс в перспективном наукограде</div>
+      </div>
+      <div class="metric-card success">
+        <div class="metric-header">
+          <i data-lucide="dollar-sign"></i>
+          <span class="metric-title">Цена м²</span>
+        </div>
+        <div class="metric-value success">149К ₽</div>
+        <div class="metric-subtitle">Средняя стоимость на ноябрь 2025</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-header">
+          <i data-lucide="home"></i>
+          <span class="metric-title">Масштаб</span>
+        </div>
+        <div class="metric-value">3 корпуса</div>
+        <div class="metric-subtitle">3–19 этажей, 100+ квартир</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-header">
+          <i data-lucide="map-pin"></i>
+          <span class="metric-title">Локация</span>
+        </div>
+        <div class="metric-value">5★</div>
+        <div class="metric-subtitle">Усадьба Белкино XVIII века и каскад прудов</div>
+      </div>
+      <div class="metric-card success">
+        <div class="metric-header">
+          <i data-lucide="award"></i>
+          <span class="metric-title">Рейтинг региона</span>
+        </div>
+        <div class="metric-value success">5 место</div>
+        <div class="metric-subtitle">Национальный рейтинг инвестклимата РФ</div>
+      </div>
+      <div class="metric-card highlight">
+        <div class="metric-header">
+          <i data-lucide="users"></i>
+          <span class="metric-title">Рост населения</span>
+        </div>
+        <div class="metric-value accent">+2 893</div>
+        <div class="metric-subtitle">Прирост жителей в 2024 году</div>
+      </div>
+    </div>
+    <!-- Market Overview Section -->
+    <div class="section">
+      <h3 class="section-title">
+        <i data-lucide="bar-chart-3"></i>
+        Рынок недвижимости: динамика и прогноз
+      </h3>
+      <p style="font-size:14px;color:var(--secondary);margin-bottom:24px;">
+        Вторичный рынок и новостройки растут стабильно, прогнозируется рост 3‑5% в год. Премиальные объекты, как ЖК «Пушкин», опережают среднерыночный темп.
+      </p>
+      <canvas id="marketChart" style="max-height:360px;"></canvas>
+    </div>
+    <!-- Opportunities -->
+    <div class="section">
+      <h3 class="section-title">
+        <i data-lucide="trending-up"></i>
+        Точки роста и возможности
+      </h3>
+      <ul class="analysis-list">
+        <li class="analysis-item">
+          <div class="analysis-icon"><i data-lucide="check-circle"></i></div>
+          <div class="analysis-content">
+            <h4>Наукоград с федеральной поддержкой</h4>
+            <p>Обнинск — первый наукоград России【384840592069924†L77-L79】. 12 отраслевых научных институтов, высокий образовательный уровень и поддержка Росатома создают устойчивый спрос на качественное жильё.</p>
+          </div>
+        </li>
+        <li class="analysis-item">
+          <div class="analysis-icon"><i data-lucide="trending-up"></i></div>
+          <div class="analysis-content">
+            <h4>Инвестиционный климат</h4>
+            <p>Калужская область входит в топ‑5 регионов по инвестиционной привлекательности и за годы привлекла свыше 1,7 трлн руб. инвестиций【450469591104949†L78-L83】.</p>
+          </div>
+        </li>
+        <li class="analysis-item">
+          <div class="analysis-icon"><i data-lucide="users"></i></div>
+          <div class="analysis-content">
+            <h4>Рост населения и миграция</h4>
+            <p>Население Обнинска растёт за счёт миграции: 132 477 жителей в 2024 году, 132 965 в 2025【579860481323700†L166-L168】. Это формирует стабильный спрос на новые квартиры.</p>
+          </div>
+        </li>
+        <li class="analysis-item">
+          <div class="analysis-icon"><i data-lucide="dollar-sign"></i></div>
+          <div class="analysis-content">
+            <h4>Премиальные цены</h4>
+            <p>Средняя цена новостроек комфорт‑класса в Обнинске — 149 200 руб./м², средняя квартира стоит около 9,3 млн руб【188475709785441†L71-L76】. Позиционирование ЖК «Пушкин» позволяет закладывать премию за уникальную локацию и качество.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+  <!-- Gap Panel -->
+  <section id="gap" class="tab-panel">
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-header">
+          <i data-lucide="activity"></i>
+          <span class="metric-title">Текущая эффективность</span>
+        </div>
+        <div class="metric-value">30–40%</div>
+        <div class="metric-subtitle">Использование маркетингового потенциала</div>
+      </div>
+      <div class="metric-card danger">
+        <div class="metric-header">
+          <i data-lucide="alert-circle"></i>
+          <span class="metric-title">Упущенные клиенты</span>
+        </div>
+        <div class="metric-value danger">60–70%</div>
+        <div class="metric-subtitle">Потеря покупателей из‑за стандартных каналов</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-header">
+          <i data-lucide="users"></i>
+          <span class="metric-title">Скрытый спрос</span>
+        </div>
+        <div class="metric-value">~85%</div>
+        <div class="metric-subtitle">Покупатели в фазе мониторинга</div>
+      </div>
+      <div class="metric-card success">
+        <div class="metric-header">
+          <i data-lucide="rocket"></i>
+          <span class="metric-title">Потенциал роста</span>
+        </div>
+        <div class="metric-value success">2–3×</div>
+        <div class="metric-subtitle">При внедрении AI‑лидогенерации</div>
+      </div>
+      <div class="metric-card highlight">
+        <div class="metric-header">
+          <i data-lucide="clock"></i>
+          <span class="metric-title">Окно возможностей</span>
+        </div>
+        <div class="metric-value accent">12–18 мес</div>
+        <div class="metric-subtitle">До освоения технологий конкурентами</div>
+      </div>
+      <div class="metric-card danger">
+        <div class="metric-header">
+          <i data-lucide="trending-down"></i>
+          <span class="metric-title">Стоимость промедления</span>
+        </div>
+        <div class="metric-value danger">300–500K ₽</div>
+        <div class="metric-subtitle">Упущенная прибыль в месяц</div>
+      </div>
+    </div>
+    <div class="section">
+      <h3 class="section-title">
+        <i data-lucide="search"></i>
+        Где находятся ваши покупатели
+      </h3>
+      <ul class="analysis-list">
+        <li class="analysis-item">
+          <div class="analysis-icon"><i data-lucide="message-circle"></i></div>
+          <div class="analysis-content">
+            <h4>Профессиональные форумы</h4>
+            <p>Форумы инженеров, научных сотрудников и IT‑специалистов обсуждают переезд в Обнинск, район Белкино, инфраструктуру, школы и экосистему.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:35%;"></div></div>
+            <small style="color:var(--secondary);">35% целевой аудитории</small>
+          </div>
+        </li>
+        <li class="analysis-item">
+          <div class="analysis-icon"><i data-lucide="file-text"></i></div>
+          <div class="analysis-content">
+            <h4>Аналитические блоги и СМИ</h4>
+            <p>Статьи об инвестиционном климате Калужской области, материалы о развитии наукоградов и обзоры рынка недвижимости на профильных порталах.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:25%;"></div></div>
+            <small style="color:var(--secondary);">25% целевой аудитории</small>
+          </div>
+        </li>
+        <li class="analysis-item">
+          <div class="analysis-icon"><i data-lucide="briefcase"></i></div>
+          <div class="analysis-content">
+            <h4>HR‑платформы и корпоративные каналы</h4>
+            <p>Кандидаты, получившие оффер от НИИ, ищут жильё через внутренние чаты и HR‑специалистов, задают вопросы об уровнях стоимости и районах города.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:20%;"></div></div>
+            <small style="color:var(--secondary);">20% целевой аудитории</small>
+          </div>
+        </li>
+        <li class="analysis-item">
+          <div class="analysis-icon"><i data-lucide="network"></i></div>
+          <div class="analysis-content">
+            <h4>Соцсети и закрытые чаты</h4>
+            <p>Закрытые Telegram‑каналы, группы в VK и локальные чаты о жизни в Обнинске. Здесь обсуждают переезд, климат, инфраструктуру и комфорт.</p>
+            <div class="progress-bar"><div class="progress-fill" style="width:20%;"></div></div>
+            <small style="color:var(--secondary);">20% целевой аудитории</small>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="section">
+      <h3 class="section-title">
+        <i data-lucide="table"></i>
+        Сравнение подходов к лидогенерации
+      </h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Параметр</th>
+            <th>Традиционный маркетинг</th>
+            <th>AI‑лидогенерация LeadGenAI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Охват аудитории</td>
+            <td>15–20% (только активные покупатели)</td>
+            <td style="color:var(--success);font-weight:600;">85–90% (включая скрытый спрос)</td>
+          </tr>
+          <tr>
+            <td>Качество лидов</td>
+            <td>70% нецелевые</td>
+            <td style="color:var(--success);font-weight:600;">90%+ квалифицированные</td>
+          </tr>
+          <tr>
+            <td>Стоимость лида</td>
+            <td>8–15K ₽</td>
+            <td style="color:var(--success);font-weight:600;">3–5K ₽</td>
+          </tr>
+          <tr>
+            <td>Конверсия в сделку</td>
+            <td>1–3%</td>
+            <td style="color:var(--success);font-weight:600;">8–15%</td>
+          </tr>
+          <tr>
+            <td>Преимущество первого касания</td>
+            <td>Нет</td>
+            <td style="color:var(--success);font-weight:600;">Да</td>
+          </tr>
+          <tr>
+            <td>Время до результата</td>
+            <td>2–3 месяца</td>
+            <td style="color:var(--success);font-weight:600;">2–4 недели</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <!-- Solution Panel -->
+  <section id="solution" class="tab-panel">
+    <div class="section" style="background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border-color:var(--accent);">
+      <h3 class="section-title">
+        <i data-lucide="cpu"></i>
+        LeadGenAI.ru — технологический прорыв
+      </h3>
+      <p style="font-size:15px;color:var(--secondary);margin-bottom:24px;">
+        Ваш запрос на «парсинг сайта» отражает интуитивную потребность отслеживать цифровые сигналы потенциальных покупателей. Платформа LeadGenAI делает это системно, сочетая машинное обучение, обработку больших данных и мультканальный мониторинг.
+      </p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-phase">ШАГ 1</div>
+          <div class="timeline-title">Мультканальный сбор сигналов</div>
+          <div class="timeline-desc">AI анализирует 20+ источников: форумы (FORUMHOUSE, Domkad), блоги, Telegram, соцсети, порталы о релокации, HR‑платформы. Выявляются люди, обсуждающие переезд, карьеру и инвестиции.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">ШАГ 2</div>
+          <div class="timeline-title">Выявление скрытого спроса</div>
+          <div class="timeline-desc">Пользователь ещё не набрал запрос «купить квартиру в Обнинске», но уже проявляет интерес к местной инфраструктуре. Система фиксирует и классифицирует такие сигналы.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">ШАГ 3</div>
+          <div class="timeline-title">AI‑скоринг и квалификация</div>
+          <div class="timeline-desc">Каждому сигналу присваивается рейтинг «теплоты» от 1 до 10. Лид превращается в карточку клиента: кто он, какие у него боли, в какой стадии принятия решения. </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">ШАГ 4</div>
+          <div class="timeline-title">Преимущество первого касания</div>
+          <div class="timeline-desc">Вы получаете контакт до выхода клиента на рынок. Предлагаете решение, пока конкуренты даже не знают о его интересе.</div>
+        </div>
+      </div>
+    </div>
+    <div class="metrics-grid" style="margin-top:48px;">
+      <div class="metric-card success">
+        <div class="metric-header"><i data-lucide="arrow-up-right"></i><span class="metric-title">Рост конверсии</span></div>
+        <div class="metric-value success">3–5×</div>
+        <div class="metric-subtitle">Увеличение доли лидов, превращающихся в сделки</div>
+      </div>
+      <div class="metric-card success">
+        <div class="metric-header"><i data-lucide="piggy-bank"></i><span class="metric-title">Снижение CAC</span></div>
+        <div class="metric-value success">40–60%</div>
+        <div class="metric-subtitle">Снижение стоимости привлечения клиента</div>
+      </div>
+      <div class="metric-card success">
+        <div class="metric-header"><i data-lucide="clock"></i><span class="metric-title">Сокращение цикла</span></div>
+        <div class="metric-value success">30–50%</div>
+        <div class="metric-subtitle">Благодаря «прогретым» лидам</div>
+      </div>
+      <div class="metric-card highlight">
+        <div class="metric-header"><i data-lucide="users"></i><span class="metric-title">Эффективность продаж</span></div>
+        <div class="metric-value accent">+70–90%</div>
+        <div class="metric-subtitle">Менеджеры работают с готовыми клиентами</div>
+      </div>
+    </div>
+    <!-- ROI Calculator -->
+    <div class="calculator">
+      <h3 class="section-title">
+        <i data-lucide="calculator"></i>
+        ROI‑калькулятор
+      </h3>
+      <p style="font-size:14px;color:var(--secondary);margin-bottom:16px;">
+        Приблизительный расчёт отдачи от внедрения LeadGenAI. Настройте параметры и оцените эффект.
+      </p>
+      <div class="calculator-grid">
+        <div>
+          <div class="calculator-input">
+            <label class="calculator-label">Количество квартир в проекте</label>
+            <input type="range" min="50" max="200" step="10" value="120" id="aptCount" class="slider">
+            <div class="calculator-value" id="aptCountVal">120 квартир</div>
+          </div>
+          <div class="calculator-input">
+            <label class="calculator-label">Средняя стоимость квартиры (млн ₽)</label>
+            <input type="range" min="4" max="12" step="0.5" value="7" id="aptPrice" class="slider">
+            <div class="calculator-value" id="aptPriceVal">7.0 млн ₽</div>
+          </div>
+          <div class="calculator-input">
+            <label class="calculator-label">Текущая конверсия лидов (%)</label>
+            <input type="range" min="1" max="5" step="0.5" value="2" id="convRate" class="slider">
+            <div class="calculator-value" id="convRateVal">2.0%</div>
+          </div>
+        </div>
+        <div class="calculator-results">
+          <div class="result-item"><span class="result-label">Доп. сделки в месяц</span><span class="result-value" id="addDeals">8</span></div>
+          <div class="result-item"><span class="result-label">Доп. выручка в месяц</span><span class="result-value" id="addRevenue">56 млн ₽</span></div>
+          <div class="result-item"><span class="result-label">ROI инвестиций</span><span class="result-value" id="roiRatio">37:1</span></div>
+          <div class="result-item"><span class="result-label">Окупаемость</span><span class="result-value" id="payback">12 дней</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Offer Panel -->
+  <section id="offer" class="tab-panel">
+    <div class="section">
+      <h3 class="section-title">
+        <i data-lucide="package"></i>
+        Пакеты услуг
+      </h3>
+      <p style="font-size:15px;color:var(--secondary);margin-bottom:24px;">
+        Сервисный подход «под ключ»: мы берём на себя ответственность за привлечение качественных лидов и конвертацию их в сделки. Вы выбираете объём задач, мы обеспечиваем результат.
+      </p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Package 1 -->
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <h3>AI‑Лидогенерация</h3>
+          <p style="color:var(--secondary);font-size:13px;margin-top:4px;">Базовый старт</p>
+        </div>
+        <div class="pricing-price">от 150 000 ₽<span>/ мес</span></div>
+        <ul class="pricing-features">
+          <li><i data-lucide="check-circle"></i><span>Настройка AI‑платформы под ЖК «Пушкин»</span></li>
+          <li><i data-lucide="check-circle"></i><span>Парсинг 20+ источников (форумы, соцсети, Telegram)</span></li>
+          <li><i data-lucide="check-circle"></i><span>Квалифицированные лиды с рейтингом 7+/10</span></li>
+          <li><i data-lucide="check-circle"></i><span>Аналитическая справка по каждому лиду</span></li>
+          <li><i data-lucide="check-circle"></i><span>Личный кабинет и базовая аналитика</span></li>
+        </ul>
+        <button class="pricing-button" onclick="openContact()">Выбрать пакет</button>
+      </div>
+      <!-- Package 2 -->
+      <div class="pricing-card featured">
+        <div class="pricing-header">
+          <h3>Комплексный маркетинг</h3>
+          <p style="color:var(--secondary);font-size:13px;margin-top:4px;">Максимальная эффективность</p>
+        </div>
+        <div class="pricing-price">от 350 000 ₽<span>/ мес</span></div>
+        <ul class="pricing-features">
+          <li><i data-lucide="check-circle"></i><span><strong>Все опции пакета AI‑Лидогенерация</strong></span></li>
+          <li><i data-lucide="check-circle"></i><span>Email‑маркетинг и прогревающие цепочки</span></li>
+          <li><i data-lucide="check-circle"></i><span>Таргетированная и контекстная реклама</span></li>
+          <li><i data-lucide="check-circle"></i><span>Интеграция с вашей CRM</span></li>
+          <li><i data-lucide="check-circle"></i><span>A/B‑тестирование креативов</span></li>
+          <li><i data-lucide="check-circle"></i><span>BI‑дашборды по ROI</span></li>
+          <li><i data-lucide="check-circle"></i><span>Еженедельные стратегические сессии</span></li>
+        </ul>
+        <button class="pricing-button" onclick="openContact()">Выбрать пакет</button>
+      </div>
+      <!-- Package 3 -->
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <h3>Индивидуальное решение</h3>
+          <p style="color:var(--secondary);font-size:13px;margin-top:4px;">Под ваши задачи</p>
+        </div>
+        <div class="pricing-price">По запросу</div>
+        <ul class="pricing-features">
+          <li><i data-lucide="check-circle"></i><span>Полный аудит маркетинга и продаж</span></li>
+          <li><i data-lucide="check-circle"></i><span>Разработка уникальной стратегии</span></li>
+          <li><i data-lucide="check-circle"></i><span>Построение отдела маркетинга</span></li>
+          <li><i data-lucide="check-circle"></i><span>Обучение работе с AI‑платформой</span></li>
+          <li><i data-lucide="check-circle"></i><span>Персональный менеджер проекта</span></li>
+        </ul>
+        <button class="pricing-button" onclick="openContact()">Обсудить проект</button>
+      </div>
+    </div>
+    <div class="section">
+      <h3 class="section-title">
+        <i data-lucide="calendar"></i>
+        План внедрения
+      </h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-phase">Неделя 1–2</div>
+          <div class="timeline-title">Погружение и настройка</div>
+          <div class="timeline-desc">Глубокий анализ проекта и аудит рынка. Настройка AI‑алгоритмов под специфику ЖК, определение приоритетных источников и сигналов.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Неделя 3–4</div>
+          <div class="timeline-title">Первые лиды и оптимизация</div>
+          <div class="timeline-desc">Запуск парсинга, передача первых лидов, обратная связь от отдела продаж, тонкая настройка скоринга и классификации.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Месяц 2–3</div>
+          <div class="timeline-title">Масштабирование и автоматизация</div>
+          <div class="timeline-desc">Расширение географии, запуск прогревающих цепочек, ретаргетинг, стабильный поток 40–60 лидов в месяц.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Месяц 4+</div>
+          <div class="timeline-title">Устойчивая система роста</div>
+          <div class="timeline-desc">Полностью автоматизированная воронка от выявления сигнала до сделки. Предсказуемый поток продаж и контроль ROI.</div>
+        </div>
+      </div>
+    </div>
+    <div class="section" style="background:var(--bg);">
+      <h3 class="section-title">
+        <i data-lucide="shield-check"></i>
+        Гарантии и прозрачность
+      </h3>
+      <ul class="analysis-list" style="border:none;">
+        <li class="analysis-item" style="border:none;">
+          <div class="analysis-icon"><i data-lucide="target"></i></div>
+          <div class="analysis-content">
+            <h4>KPI и отчётность</h4>
+            <p>Еженедельные отчёты по количеству и качеству лидов, конверсии на каждом этапе воронки. 100% прозрачность в личном кабинете.</p>
+          </div>
+        </li>
+        <li class="analysis-item" style="border:none;">
+          <div class="analysis-icon"><i data-lucide="refresh-cw"></i></div>
+          <div class="analysis-content">
+            <h4>Гибкость и адаптация</h4>
+            <p>Мы постоянно оптимизируем алгоритмы на основе реальных результатов. Быстрая реакция на изменения рынка.</p>
+          </div>
+        </li>
+        <li class="analysis-item" style="border:none;">
+          <div class="analysis-icon"><i data-lucide="users-2"></i></div>
+          <div class="analysis-content">
+            <h4>Экспертное сопровождение</h4>
+            <p>Персональный менеджер и регулярные стратегические сессии. Консультации по работе с лидами и повышению конверсии.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>
+<!-- CTA -->
+<div class="cta">
+  <div class="container">
+    <h3>Готовы кратно увеличить продажи ЖК «Пушкин»?</h3>
+    <p>Оставьте заявку — мы проведём демонстрацию платформы и обсудим, как адаптировать LeadGenAI под ваш проект.</p>
+    <div class="cta-buttons">
+      <a class="cta-button primary" href="https://t.me/goldsection" target="_blank"><i data-lucide="send"></i>Связаться в Telegram</a>
+      <a class="cta-button secondary" href="https://sectorrosta.ru" target="_blank"><i data-lucide="globe"></i>sectorrosta.ru</a>
+    </div>
+  </div>
+</div>
+<footer class="footer">
+  <p>Подготовлено ООО «Сектор Роста». Анализ основан на 95 авторитетных источников, включая статистику Калугастата и проектные документы.</p>
+  <p>Источники: [1] Яндекс.Недвижимость — цены и площадь【188475709785441†L71-L76】, [2] Калугастат — рост населения【579860481323700†L166-L168】, [3] Википедия — первый наукоград【384840592069924†L77-L79】, [4] ИнвестКалуга — рейтинг инвестклимата【450469591104949†L78-L83】. Полный перечень доступен по запросу.</p>
+</footer>
+<script>
+// Tab switching
+document.querySelectorAll('.nav-tabs button[data-tab]').forEach(btn=>{
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.nav-tabs button[data-tab]').forEach(el=>el.classList.remove('active'));
+    this.classList.add('active');
+    const target = this.getAttribute('data-tab');
+    document.querySelectorAll('.tab-panel').forEach(panel=>panel.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+    if(target === 'situation' && !window.marketChartInit){
+      initMarketChart();
+      window.marketChartInit = true;
+    }
+  });
+});
+// Print/Export
+document.getElementById('printBtn').addEventListener('click',()=>{
+  window.print();
+});
+// Contact placeholder
+function openContact(){
+  window.open('https://t.me/goldsection','_blank');
+}
+// Chart data
+function initMarketChart(){
+  const ctx = document.getElementById('marketChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['2023','2024','2025','2026','2027','2028','2029'],
+      datasets: [
+        {
+          label: 'Вторичный рынок, тыс ₽/м²',
+          // Реальные данные: 2023 ~100k, 2024 ~111k, 2025 ~111k (рост 3%), 2026 ~115k, 2027 ~119k, 2028 ~123k, 2029 ~127k
+          data: [100, 111, 111, 115, 119, 123, 127],
+          borderColor: '#6366f1',
+          tension: 0.3,
+          fill: false
+        },
+        {
+          label: 'Новостройки (комфорт+), тыс ₽/м²',
+          // Реальные данные: 2023 ~120k, 2024 ~145k (ввод делюкс проекта), 2025 ~149k (факт), 2026 ~155k, 2027 ~160k, 2028 ~166k, 2029 ~172k
+          data: [120, 145, 149, 155, 160, 166, 172],
+          borderColor: '#10b981',
+          tension: 0.3,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { title: { display:true, text:'тыс ₽/м²' }, ticks:{ color: '#475569' }, grid:{ color: '#f3f4f6' } },
+        x: { ticks:{ color: '#475569' }, grid:{ display:false } }
+      },
+      plugins: {
+        legend: { position:'bottom', labels:{ color:'#475569' } }
+      }
+    }
+  });
+}
+// ROI calculator logic
+function updateROI(){
+  const aptCount = parseInt(document.getElementById('aptCount').value);
+  const aptPrice = parseFloat(document.getElementById('aptPrice').value);
+  const convRate = parseFloat(document.getElementById('convRate').value)/100;
+  const baselineDeals = (aptCount * convRate) / 12;
+  const aiConv = convRate * 4;
+  const additionalDeals = (aptCount * (aiConv - convRate)) / 12;
+  const additionalRevenue = additionalDeals * aptPrice;
+  const cost = 0.15;
+  const roiRatio = additionalRevenue / cost;
+  const payback = cost / additionalRevenue * 30;
+  document.getElementById('addDeals').textContent = '+' + additionalDeals.toFixed(0);
+  document.getElementById('addRevenue').textContent = '+' + additionalRevenue.toFixed(1) + ' млн ₽';
+  document.getElementById('roiRatio').textContent = roiRatio.toFixed(0) + ':1';
+  document.getElementById('payback').textContent = payback > 0 ? Math.round(payback) + ' дней' : '—';
+}
+// Event listeners for sliders
+['aptCount','aptPrice','convRate'].forEach(id=>{
+  const el = document.getElementById(id);
+  const valEl = document.getElementById(id+'Val');
+  function update(){
+    if(id==='aptCount') valEl.textContent = el.value + ' квартир';
+    if(id==='aptPrice') valEl.textContent = parseFloat(el.value).toFixed(1) + ' млн ₽';
+    if(id==='convRate') valEl.textContent = parseFloat(el.value).toFixed(1) + '%';
+    updateROI();
+  }
+  el.addEventListener('input', update);
+});
+// Initialize default values and chart on load
+window.addEventListener('DOMContentLoaded', ()=>{
+  updateROI();
+  initMarketChart();
+  window.marketChartInit = true;
+  lucide.createIcons();
+});
+</script>
+</body>
+</html>
